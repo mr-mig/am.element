@@ -1,0 +1,14 @@
+{
+  "name": "am.element",
+  "version": "1.0.0",
+  "description": "Structural abstraction for ambitious framework.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Mr_Mig",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "^1.3.0"
+  }
+}
