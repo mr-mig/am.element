@@ -9,6 +9,8 @@
   "author": "Mr_Mig",
   "license": "MIT",
   "dependencies": {
+    "am.channel": "git://github.com/mr-mig/am.channel",
+    "am.state": "git://github.com/mr-mig/am.state",
     "angular": "^1.3.0"
   }
 }
