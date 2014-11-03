@@ -9,8 +9,6 @@ var definitionSchema = {
   state: {
     // element's state object
   },
-  controller: function (some, injected, services) {
-  },
   postlink: function (state, el, scope, attrs) {
   }
 };
@@ -19,6 +17,7 @@ function createElementWithState(stateCreationFunction){
   return function createElement(definition) {
 
     var deps = definition.ngDeps || [];
+    definition.postlink = definition.postlink || function(){};
 
     if (!definition.name) {
       throw new Error('You tried to create the element without name specified!');
@@ -48,7 +47,6 @@ function makeDirectiveFactory(definition, stateName) {
     return {
       restrict: 'E',
       template: definition.template,
-      controller: definition.controller,
       link: function (scope, el, attrs) {
         if (!scope.state) {
           scope.state = new ElementState();
