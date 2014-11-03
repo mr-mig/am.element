@@ -24,9 +24,8 @@ function createElementWithState(stateCreationFunction){
       throw new Error('You tried to create the element without name specified!');
     }
 
-    // duplicate: see am.state
-    var stateName = conv.composedName(definition.name, conv.behaviourComponents.state);
-    var moduleName = conv.ngModuleName('elements', definition.name);
+    var stateName = conv.names.state(definition.name);
+    var moduleName = conv.names.module(conv.structureComponents.element, definition.name);
 
     var state = stateCreationFunction(
       conv.behaviourComponents.element,
