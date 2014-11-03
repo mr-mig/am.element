@@ -7,6 +7,14 @@ var createElement = require('./index')(createState);
 module.exports = function(definition){
   var result = createElement(definition);
 
-  return angular.module(result.moduleName, result.moduleDependencies)
+  // try to get the module first
+  // this is the case when state is created for a structure entity like element
+  try{
+    angular.module(result.moduleName);
+  } catch(e) {
+    angular.module(result.moduleName, []);
+  }
+
+  return angular.module(result.moduleName)
     .directive(result.elementName, result.elementFactoryFn);
 };
