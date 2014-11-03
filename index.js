@@ -1,67 +1,73 @@
 'use strict';
-var angular = require('angular');
 var conv = require('am.convention');
-var createState = require('am.state');
-module.exports = elementFactory;
+module.exports = createElementWithState;
 
 
 var definitionSchema = {
-	name: 'element name',
-	ngDeps: ['array', 'of', 'angular', 'module names'],
-	state: {
-		// element's state object
-	},
-	controller: function (some, injected, services) {
-	},
-	postlink: function (state, el, scope, attrs) {
-	}
+  name: 'element name',
+  ngDeps: ['array', 'of', 'angular', 'module names'],
+  state: {
+    // element's state object
+  },
+  controller: function (some, injected, services) {
+  },
+  postlink: function (state, el, scope, attrs) {
+  }
 };
 
-function elementFactory(definition) {
+function createElementWithState(stateCreationFunction){
+  return function createElement(definition) {
 
-	var deps = definition.ngDeps || [];
+    var deps = definition.ngDeps || [];
 
-	if (!definition.name) {
-		throw new Error('You tried to create the element without name specified!');
-	}
+    if (!definition.name) {
+      throw new Error('You tried to create the element without name specified!');
+    }
 
-	var prefix = conv.prefix(definition.project);
+    // duplicate: see am.state
+    var stateName = conv.composedName(definition.name, conv.behaviourComponents.state);
+    var moduleName = conv.ngModuleName('elements', definition.name);
 
-	// duplicate: see am.state
-	var stateName = conv.composedName(prefix.upper, definition.name, conv.behaviourComponents.state);
-	var moduleName = conv.ngModuleName(prefix.lower, 'elements', definition.name);
+    var state = stateCreationFunction(
+      conv.behaviourComponents.element,
+      definition, definition.state);
+    var directive = makeDirectiveFactory(definition, stateName);
 
-	var state = createState(conv.behaviourComponents.element, definition, definition.state);
-	var directive = makeDirective(definition, stateName);
-
-	return angular.module(moduleName, deps)
-		.directive(definition.name, directive);
+    return {
+      moduleName: moduleName,
+      elementFactoryFn: directive,
+      elementName: definition.name,
+      moduleDependencies: deps
+    };
+  };
 }
 
-function makeDirective(definition, stateName) {
-	function directiveFactory(ElementState, Channels) {
-		return {
-			restrict: 'E',
-			template: definition.template,
-			controller: definition.controller,
-			link: function (scope, el, attrs) {
-				if (!scope.state) {
-					scope.state = new ElementState();
-				}
-				if (scope.channel){
-					Channels[scope.channel].listen(scope, scope.state);
-				}
 
-				definition.postlink(scope.state, el, scope, attrs);
-			},
-			scope: {
-				state: '=',
-				channel: '@'
-			}
-		};
-	}
+// use angular directive syntax to define element
+function makeDirectiveFactory(definition, stateName) {
+  function directiveFactory(ElementState, Channels) {
+    return {
+      restrict: 'E',
+      template: definition.template,
+      controller: definition.controller,
+      link: function (scope, el, attrs) {
+        if (!scope.state) {
+          scope.state = new ElementState();
+        }
+        if (scope.channel) {
+          Channels[scope.channel].listen(scope, scope.state);
+        }
 
-	directiveFactory.$inject = [stateName, 'Channels'];
+        definition.postlink(scope.state, el, scope, attrs);
+      },
+      scope: {
+        state: '=',
+        channel: '@'
+      }
+    };
+  }
 
-	return directiveFactory;
+  directiveFactory.$inject = [stateName, 'Channels'];
+
+  return directiveFactory;
 }
