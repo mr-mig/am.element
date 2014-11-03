@@ -11,7 +11,7 @@
   "dependencies": {
     "am.channel": "git://github.com/mr-mig/am.channel#v1.0.2",
     "am.convention": "git://github.com/mr-mig/am.convention#v1.0.3",
-    "am.state": "git://github.com/mr-mig/am.state#v1.0.5",
+    "am.state": "git://github.com/mr-mig/am.state#v1.0.6",
     "angular-cjs": "git://github.com/mr-mig/angular-cjs#v1.0.0"
   }
 }
