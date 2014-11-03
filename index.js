@@ -23,6 +23,10 @@ function createElementWithState(stateCreationFunction){
       throw new Error('You tried to create the element without name specified!');
     }
 
+    if (!definition.template) {
+      throw new Error('You tried to create the element without template specified!');
+    }
+
     var stateName = conv.names.state(definition.name);
     var moduleName = conv.names.ngModule(conv.structureComponents.element, definition.name);
 
