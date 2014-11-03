@@ -25,7 +25,7 @@ function createElementWithState(stateCreationFunction){
     }
 
     var stateName = conv.names.state(definition.name);
-    var moduleName = conv.names.module(conv.structureComponents.element, definition.name);
+    var moduleName = conv.names.ngModule(conv.structureComponents.element, definition.name);
 
     var state = stateCreationFunction(
       conv.behaviourComponents.element,
