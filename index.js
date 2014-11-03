@@ -28,7 +28,7 @@ function createElementWithState(stateCreationFunction){
     var moduleName = conv.names.ngModule(conv.structureComponents.element, definition.name);
 
     var state = stateCreationFunction(
-      conv.behaviourComponents.element,
+      conv.structureComponents.element,
       definition, definition.state);
     var directive = makeDirectiveFactory(definition, stateName);
 
