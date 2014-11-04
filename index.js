@@ -9,7 +9,8 @@ var definitionSchema = {
   state: {
     // element's state object
   },
-  postlink: function (state, el, scope, attrs) {
+  services: ['array', 'of', 'injectable', 'services'],
+  postlink: function (scope, el, services) {
   }
 };
 
@@ -17,6 +18,7 @@ function createElementWithState(stateCreationFunction){
   return function createElement(definition) {
 
     var deps = definition.ngDeps || [];
+    definition.services = definition.services || [];
     definition.postlink = definition.postlink || function(){};
 
     if (!definition.name) {
@@ -48,6 +50,7 @@ function createElementWithState(stateCreationFunction){
 // use angular directive syntax to define element
 function makeDirectiveFactory(definition, stateName) {
   function directiveFactory(ElementState, Channels) {
+    var injectedCustomServices = Array.prototype.slice.call(arguments, 2);
     return {
       restrict: 'E',
       template: definition.template,
@@ -59,7 +62,10 @@ function makeDirectiveFactory(definition, stateName) {
           Channels[scope.channel].listen(scope, scope.state);
         }
 
-        definition.postlink(scope.state, el, scope, attrs);
+        var injectedArguments = [scope, el].concat(injectedCustomServices);
+
+        // call the postlink with all custom services injected after scope and el arguments
+        definition.postlink.apply(undefined, injectedArguments);
       },
       scope: {
         state: '=',
@@ -68,7 +74,7 @@ function makeDirectiveFactory(definition, stateName) {
     };
   }
 
-  directiveFactory.$inject = [stateName, 'Channels'];
+  directiveFactory.$inject = [stateName, 'Channels'].concat(definition.services);
 
   return directiveFactory;
 }
