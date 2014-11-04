@@ -55,6 +55,9 @@ function makeDirectiveFactory(definition, stateName) {
       restrict: 'E',
       template: definition.template,
       link: function (scope, el, attrs) {
+        if (!attrs.state) {
+          console.log('Warning! It seems you forgot to specify state attribute for \'' + definition.name + '\' element!');
+        }
         if (!scope.state) {
           scope.state = new ElementState();
         }
