@@ -20,6 +20,7 @@ function createElementWithState(stateCreationFunction){
     var deps = definition.ngDeps || [];
     definition.services = definition.services || [];
     definition.postlink = definition.postlink || function(){};
+    definition.state = definition.state || {};
 
     if (!definition.name) {
       throw new Error('You tried to create the element without name specified!');
