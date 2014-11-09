@@ -9,9 +9,9 @@
   "author": "Mr_Mig",
   "license": "MIT",
   "dependencies": {
-    "am.channel": "git://github.com/mr-mig/am.channel#v1.0.3",
+    "am.channel": "git://github.com/mr-mig/am.channel#v1.0.4",
     "am.convention": "git://github.com/mr-mig/am.convention#v1.0.3",
-    "am.state": "git://github.com/mr-mig/am.state#v1.0.7",
+    "am.state": "git://github.com/mr-mig/am.state#v1.0.8",
     "angular-cjs": "git://github.com/mr-mig/angular-cjs#v1.0.0"
   }
 }
