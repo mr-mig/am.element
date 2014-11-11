@@ -63,8 +63,10 @@ function makeDirectiveFactory(definition, stateName) {
           scope.state = new ElementState();
         }
         if (scope.channel) {
-          Channels[scope.channel].listen(scope, scope.state);
-
+          var channels = scope.channel.split(' ');
+          channels.forEach(function(channel){
+            Channels.get(channel).listen(scope, scope.state);
+          });
         }
 
         var injectedArguments = [scope, el].concat(injectedCustomServices);
